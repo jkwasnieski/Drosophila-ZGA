@@ -1,3 +1,8 @@
+##### Part of rnaseqlib package, /events/SpliceGraph.py
+##### Originally written by Yarden Katz, https://github.com/yarden/rnaseqlib
+##### Modified by Jamie Kwasnieski, get_intron_len function expanded to return all 
+##### possible introns as RI, not just introns with annotated instance of RI
+
 ##
 ## SpliceGraph class.
 ##
@@ -242,18 +247,20 @@ def define_RI(sg,
                 # and the donor's start as the start coordinate, then it's a
                 # retained intron
                 intron_as_exon = Unit(donor.start, acceptor.end)
-                if sg.has_node(intron_as_exon):
-                    # Get length of intron
-                    intron_len = get_intron_len(donor, acceptor)
-                    if intron_len < min_intron_len:
-                        continue
-                    ri = (donor.coords_str, acceptor.coords_str)
-                    if ri in retained_introns:
-                        # Skip introns that we've seen already
-                        continue
-                    # Output retained intron to gff file
-                    output_RI(gff_out, donor, acceptor, intron_len)
-                    retained_introns[ri] = True
+                # if sg.has_node(intron_as_exon): # edit: JK -> script will return
+                #                   all possible introns as RI not just 
+                #                   introns with an annotated RI isoform
+                # Get length of intron
+                intron_len = get_intron_len(donor, acceptor)
+                if intron_len < min_intron_len:
+                    continue
+                ri = (donor.coords_str, acceptor.coords_str)
+                if ri in retained_introns:
+                    # Skip introns that we've seen already
+                    continue
+                # Output retained intron to gff file
+                output_RI(gff_out, donor, acceptor, intron_len)
+                retained_introns[ri] = True
 
 
 def output_RI(gff_out, donor, acceptor, intron_len,
