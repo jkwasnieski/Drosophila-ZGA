@@ -1,3 +1,7 @@
+##### Part of rnaseqlib package, /events/parseTables.py
+##### Originally written by Yarden Katz, https://github.com/yarden/rnaseqlib
+##### Modified by Jamie Kwasnieski, readTable function expanded to read in space delimited files
+
 import os, sys, operator, string
 import collections
 
@@ -48,7 +52,8 @@ def readTable(table_f):
             # Skip header
             continue
         else:
-            vals = line.strip().split("\t")
+            vals = line.strip().split()
+            # vals = line.strip().split("\t")
             # Mapping from column names in UCSC table to values
             # when no header is given
             col_values = \
